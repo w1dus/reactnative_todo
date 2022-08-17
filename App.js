@@ -45,20 +45,24 @@ export default function App() {
   const setData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem(STORAGE_KEY, jsonValue)
+      await AsyncStorage.setItem(STORAGE_KEY, jsonValue);
     } catch (e) {
       console.log('saving error');
     }
   }
+
 
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem(STORAGE_KEY)
       if(jsonValue != null){ 
         const getItem = JSON.parse(jsonValue);
-        setItems(getItem.map((item) => (item.modify === true) ? {...item, modify : false} : {...item}))
+        setItems(getItem);
+        const newItems = Object.keys(getItem).map((key) => ( (getItem[key].modify === true) ? {...getItem[key], modify: false } : { ...getItem[key]} ))
+        setItems(newItems)
+      }else{ 
+        //setItems({}) 
       }
-      else{ setItems({}) }
     } catch(e) {
       console.log('error reading value');
     }
@@ -227,6 +231,7 @@ const styles = StyleSheet.create({
     paddingHorizontal : 10,
     paddingVertical : 20,
     width : windowWidth,
+    alignItems : 'center'
   },
   input : {
     backgroundColor : '#fff',
@@ -234,8 +239,8 @@ const styles = StyleSheet.create({
     paddingVertical : 10,
     fontSize: 16,
     borderRadius : 5,
-    width: windowWidth,
-    maxWidth : 350,
+    width: '100%',
+    maxWidth: 350,
     flexShrink: 1,
   },
   itemContain : {
