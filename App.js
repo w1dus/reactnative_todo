@@ -57,11 +57,9 @@ export default function App() {
       const jsonValue = await AsyncStorage.getItem(STORAGE_KEY)
       if(jsonValue != null){ 
         const getItem = JSON.parse(jsonValue);
-        setItems(getItem);
-        const newItems = Object.keys(getItem).map((key) => ( (getItem[key].modify === true) ? {...getItem[key], modify: false } : { ...getItem[key]} ))
-        setItems(newItems)
+        setItems(Object.keys(getItem).map((key) => ( (getItem[key].modify === true) ? {...getItem[key], modify: false } : { ...getItem[key]} )))
       }else{ 
-        //setItems({}) 
+        setItems({}) 
       }
     } catch(e) {
       console.log('error reading value');
